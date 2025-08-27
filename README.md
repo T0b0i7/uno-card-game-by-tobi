@@ -118,3 +118,4 @@ Une confirmation “Êtes-vous sûr ?” peut apparaître si le joueur pioche al
 L’objectif est de créer une boucle de jeu esthétique, minimaliste mais satisfaisante, relaxante et divertissante, pour que les joueurs aient envie de rejouer encore et encore.
 
 Auteur : Eucher ABATTI – Vibe Codeur
+unog-ame.netlify.app
