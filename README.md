@@ -1,111 +1,120 @@
-# UNO Card Game (1v1):flower_playing_cards:
-**UNO** is an American shedding-type card game that is played with a specially printed deck. The game's general principles put it into the crazy eights family of card games, and it is similar to the traditional European game mau-mau. It has been a Mattel brand since 1992.
+UNO Card Game (1v1) :flower_playing_cards:
 
-🔴 Technologies used, **HTML, CSS, JS**
+UNO est un jeu de cartes de type “shedding” américain, joué avec un jeu de cartes spécialement imprimé. Les principes généraux du jeu le rapprochent de la famille des “crazy eights” et il est similaire au jeu européen traditionnel mau-mau. Le jeu appartient à la marque Mattel depuis 1992.
+
+🔴 Technologies utilisées : HTML, CSS, JS
 
 <img src="head.png">
+Comment ce jeu fonctionne :hourglass:
 
+Le jeu commence automatiquement au chargement.
 
-# Welcome to UNO!:peanuts:
-[![forthebadge play-here-uno](play-here-uno.svg)](https://abhisheks008.github.io/UNO/) <img src="https://github.com/abhisheks008/UNO/blob/main/images/uno!.png" height="60px">
+Le joueur et l’ordinateur (CPU) commencent chacun avec 7 cartes, et une carte numérique démarre la pile de jeu. Le joueur commence. Le joueur peut :
 
-# How this game works:hourglass:
+Jouer une carte de la même couleur ou valeur
 
-- The game will start automatically upon loading.
+Jouer une carte Action (Reverse, Skip, Draw 2, Draw 4, Wild)
 
-- The player and the CPU will each begin with 7 cards, and a number card will begin the Play Pile. The player will go first. The player can either click on a card of matching value or color to play it, play an Action Card (Reverse, Skip, Draw 2, Draw 4, Wild), or if no playable cards are available, click on the Draw Pile for a new card and forfeit their turn.
+Si aucune carte jouable n’est disponible, cliquer sur la pile de tirage pour piocher une carte et passer son tour
 
-- Next the CPU will play, either playing an appropriate card or taking one from the Draw Pile.
+Ensuite, le CPU joue, en jouant une carte appropriée ou en piochant une carte.
 
-- Draw 2 (+2) and Draw 4 (+4) cards will automatically add their amount to the victim's hand and advance the turn. Reverse and Skip cards will both skip the victim's turn (since there are only two players, Reverse essentially becomes a Skip). Wild cards may be played at any time.
+Les cartes Draw 2 (+2) et Draw 4 (+4) ajoutent automatiquement le nombre de cartes à la main de l’adversaire et passent le tour. Reverse et Skip sautent le tour de l’adversaire (avec deux joueurs, Reverse devient un Skip). Les cartes Wild peuvent être jouées à tout moment.
 
-- The immediate goal is to be the first one to have no cards, at which time the opposing player's cards will be totaled and added to their score according to the following rules:
-   >numbered cards 0-9 = face value </br>
-   >Reverse, Skip, +2 = 20pts</br>
-   >Wild, Wild +4 = 50pts
+L’objectif immédiat est d’être le premier à ne plus avoir de cartes. Les cartes restantes de l’adversaire sont additionnées selon les règles suivantes :
 
-- **The first player to reach 100 loses the game.**
+Cartes numérotées 0-9 = valeur faciale
+Reverse, Skip, +2 = 20 pts
+Wild, Wild +4 = 50 pts
 
+Le premier joueur à atteindre 100 perd la partie.
 
-## Algorithm and Workflow :abacus:
+Algorithme et flux de jeu :abacus:
 
-Number Cards are straight forward:
-```js
-red8 = { <br>
-    value: 8,<br>
-    point: 8,<br>
-    color: 'red',<br>
-    changeTurn: true,<br>
-    drawValue: 0<br>
-}
-```
+Cartes Numériques :
 
-Action Cards will be assigned a value for the sake of logic comparisons, in ascending order of danger to the CPU in the event it loses:
-```js
-greenReverse = {<br>
-    value: 10,<br>
-    point: 20,<br>
-    color: 'green',<br>
-    changeTurn: false,<br>
-    drawValue: 0<br>
+red8 = {
+    value: 8,
+    point: 8,
+    color: 'red',
+    changeTurn: true,
+    drawValue: 0
 }
 
-orangeSkip = {<br>
-    value: 11,<br>
-    point: 20,<br>
-    color: 'yellow',<br>
-    changeTurn: false,<br>
-    drawValue: 0<br>
+
+Cartes Action (valeur croissante pour la logique CPU) :
+
+greenReverse = {
+    value: 10,
+    point: 20,
+    color: 'green',
+    changeTurn: false,
+    drawValue: 0
 }
 
-blueDraw2 = {<br>
-    value: 12,<br>
-    point: 20,<br>
-    color: 'blue',<br>
-    changeTurn: true,<br>
-    drawValue: 2<br>
+orangeSkip = {
+    value: 11,
+    point: 20,
+    color: 'yellow',
+    changeTurn: false,
+    drawValue: 0
 }
 
-wild = {<br>
-    value: 13,<br>
-    point: 50,<br>
-    color: 'any',<br>
-    changeTurn: true,<br>
-    drawValue: 0<br>
+blueDraw2 = {
+    value: 12,
+    point: 20,
+    color: 'blue',
+    changeTurn: true,
+    drawValue: 2
 }
 
-wild4 = {<br>
-    value: 14,<br>
-    point: 50,<br>
-    color: 'any',<br>
-    changeTurn: true,<br>
-    drawValue: 4<br>
+wild = {
+    value: 13,
+    point: 50,
+    color: 'any',
+    changeTurn: true,
+    drawValue: 0
 }
-```
-- The gameController will use the changeTurn and drawValue properties to determine whose turn it is and whether or not any cards need to be drawn.
 
-## How CPU is playing!:computer:
-The CPU will have two arrays it keeps track of two arrays:
-```js
+wild4 = {
+    value: 14,
+    point: 50,
+    color: 'any',
+    changeTurn: true,
+    drawValue: 4
+}
+
+
+Le gameController utilise changeTurn et drawValue pour déterminer le tour du joueur et si des cartes doivent être piochées.
+
+Comment le CPU joue :computer:
+
+Le CPU garde deux tableaux :
+
 cpuHand = []
 playableCards = []
-```
-
-Based on the last card played and it's properties, the CPU will loop through it's cpuHand array, and any card that matches either the value or color of the last card played will be pushed into the playableCards array along with any wilds the CPU may be holding.
-
-Since part of the fun and strategy is knowing when to play your Action Cards, the CPU will randomize their strategy each turn, determined by a Math.Random() variable. If the randomizer is above 0.5, the CPU will prioritize playing Action Cards in an effort to keep their losing score low. If the randomizer is below 0.5, the CPU will hold onto their Action Cards for a later turn and instead play Number Cards. There will also be logic to skip the randomizer once the player gets below a certain number of cards, at which point the CPU will only prioritize Action Cards.
 
 
-## How the Player feels!:red_haired_woman::man:
-Similar to how the computer will keep track of which cards it can play, so will the gameController do for the player. Should the player click an invalid card, a message will pop up telling the player so. 
+Selon la dernière carte jouée, le CPU parcourt cpuHand et met dans playableCards toutes les cartes jouables, incluant les Wilds.
 
-These messages and the Game Over screen will be the only on screen prompts in an effort to minimize distractions and allow the flow of the game to take front and center.
+Pour rendre le CPU stratégique :
 
-(In an effort to protect against unintended clicks, there might be an "Are you sure?" message if the player clicks the Draw Pile while holding playable cards.)
+Si Math.random() > 0.5 → le CPU priorise les cartes Action pour réduire son score en cas de perte.
 
-The goal is to create an aesthetically pleasing, minimal-yet-satisfying game loop that is relaxing and entertaining and that - hopefully - users will want to play again and again.
+Si Math.random() < 0.5 → le CPU garde les cartes Action et joue des cartes Numériques.
 
----------------------------------------------
+Quand le joueur a peu de cartes, le CPU priorise systématiquement les cartes Action.
 
-### ©️ Code Contributed by, Abhishek Sharma, 2022 :link: <a href = "https://github.com/abhisheks008"> abhisheks008 </a>
-#### Show some :heart: if you like it!
+Comment le joueur ressent le jeu :red_haired_woman::man:
+
+Le gameController suit les cartes jouables du joueur.
+
+Si le joueur clique sur une carte invalide, un message s’affiche.
+
+Ces messages et l’écran de fin de partie sont les seuls prompts pour ne pas distraire le joueur.
+
+Une confirmation “Êtes-vous sûr ?” peut apparaître si le joueur pioche alors qu’il a des cartes jouables.
+
+L’objectif est de créer une boucle de jeu esthétique, minimaliste mais satisfaisante, relaxante et divertissante, pour que les joueurs aient envie de rejouer encore et encore.
+
+Auteur : Eucher ABATTI – Vibe Codeur
